@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion, WebFetch, WebSea
           ║                                                  ║
           ║  Skill.......: gtm-forge                         ║
           ║  Author......: machug          (hughtec.com)     ║
-          ║  Version.....: 1.0.0                             ║
+          ║  Version.....: 1.1.0                             ║
           ║  Released....: 2026                              ║
           ║  License.....: MIT                               ║
           ║  Requires....: Python 3.10+, litellm             ║
@@ -368,7 +368,7 @@ Competitive counter-pitches: 3 generated
 Funding programs identified: 4
 
 Pipeline: research > verify > stress-test > debate (2 rounds) > refine
-Models used: gpt-5.4, gemini-2.5-pro, grok-4
+Models used: gpt-5.4, gemini-3.1-pro, grok-4.20
 ```
 
 3. Save the refined GTM alongside the original:
@@ -504,9 +504,9 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 |----------|---------|----------------|
 | OpenAI | `OPENAI_API_KEY` | `gpt-5.4`, `gpt-5.4-pro`, `o3` |
 | Anthropic | `ANTHROPIC_API_KEY` | `claude-opus-4-6`, `claude-sonnet-4-6` |
-| Google | `GEMINI_API_KEY` | `gemini/gemini-2.5-pro`, `gemini/gemini-2.5-flash` |
-| xAI | `XAI_API_KEY` | `xai/grok-4-0709`, `xai/grok-4-1-fast-reasoning` |
-| Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-4-6`, `foundry/grok-4` |
+| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-2.5-flash` |
+| xAI | `XAI_API_KEY` | `xai/grok-4.20-0309-reasoning`, `xai/grok-4.20-0309-non-reasoning` |
+| Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-4-6`, `foundry/grok-4.20` |
 | Mistral | `MISTRAL_API_KEY` | `mistral/mistral-large` |
 | Groq | `GROQ_API_KEY` | `groq/llama-3.3-70b-versatile` |
 | Deepseek | `DEEPSEEK_API_KEY` | `deepseek/deepseek-chat` |
