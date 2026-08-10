@@ -84,6 +84,8 @@ def codex_auth_mode() -> Optional[str]:
         data = json.loads(auth_path.read_text())
     except (OSError, json.JSONDecodeError):
         return None
+    if not isinstance(data, dict):
+        return None
     mode = data.get("auth_mode")
     if mode:
         return mode

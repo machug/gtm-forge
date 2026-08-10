@@ -127,6 +127,16 @@ class TestCodexChatGPTPreflight:
         monkeypatch.setattr(providers.Path, "home", staticmethod(lambda: tmp_path))
         assert codex_auth_mode() is None
 
+    def test_auth_mode_non_dict_json(self, tmp_path, monkeypatch):
+        codex_dir = tmp_path / ".codex"
+        codex_dir.mkdir()
+        for content in ("null", "[]", '"chatgpt"'):
+            (codex_dir / "auth.json").write_text(content)
+            monkeypatch.setattr(
+                providers.Path, "home", staticmethod(lambda: tmp_path)
+            )
+            assert codex_auth_mode() is None
+
     def test_warns_on_unsupported_model(self, capsys):
         with patch("providers.codex_auth_mode", return_value="chatgpt"):
             warn_codex_chatgpt_model_support(["codex/gpt-5.3-codex", "gpt-5.5"])
@@ -148,6 +158,65 @@ class TestCodexChatGPTPreflight:
         with patch("providers.codex_auth_mode", return_value="chatgpt"):
             warn_codex_chatgpt_model_support(["gpt-5.5", "claude-opus-5"])
         assert capsys.readouterr().err == ""
+
+
+class TestCodexErrorParsing:
+    def _run_codex(self, stdout, returncode=0):
+        fake = type(
+            "P", (), {"returncode": returncode, "stdout": stdout, "stderr": ""}
+        )()
+        with (
+            patch("models.CODEX_AVAILABLE", True),
+            patch("models.CODEX_PATH", "/usr/bin/codex"),
+            patch("models.subprocess.run", return_value=fake),
+        ):
+            return models.call_codex_model("sys", "user", "codex/gpt-5.5")
+
+    def test_string_error_field_parsed(self):
+        stdout = json.dumps({"type": "turn.failed", "error": "usage limit reached"})
+        with pytest.raises(RuntimeError, match="usage limit reached"):
+            self._run_codex(stdout)
+
+    def test_null_error_field_does_not_crash(self):
+        lines = [
+            json.dumps({"type": "error", "error": None}),
+            json.dumps(
+                {
+                    "type": "item.completed",
+                    "item": {"type": "agent_message", "text": "hi"},
+                }
+            ),
+        ]
+        text, _, _ = self._run_codex("\n".join(lines))
+        assert text == "hi"
+
+    def test_non_dict_jsonl_line_skipped(self):
+        lines = [
+            json.dumps(["not", "a", "dict"]),
+            json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": "ok"}}),
+        ]
+        text, _, _ = self._run_codex("\n".join(lines))
+        assert text == "ok"
+
+    def test_timeout_raises_clean_message(self):
+        import subprocess as sp
+
+        with (
+            patch("models.CODEX_AVAILABLE", True),
+            patch("models.CODEX_PATH", "/usr/bin/codex"),
+            patch(
+                "models.subprocess.run",
+                side_effect=sp.TimeoutExpired(
+                    cmd=["codex", "exec", "secret doc with invalid API key text"],
+                    timeout=600,
+                ),
+            ),
+        ):
+            with pytest.raises(RuntimeError) as excinfo:
+                models.call_codex_model("sys", "user", "codex/gpt-5.5")
+        # Clean message: no argv/document leakage, stays retryable
+        assert str(excinfo.value) == "Codex CLI timed out after 600s"
+        assert not is_non_retryable_error(str(excinfo.value))
 
 
 class TestAntigravityProvider:

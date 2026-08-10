@@ -282,10 +282,17 @@ def call_codex_model(
         full_prompt,
     ]
 
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=timeout,
-        stdin=subprocess.DEVNULL,
-    )
+    try:
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=timeout,
+            stdin=subprocess.DEVNULL,
+        )
+    except subprocess.TimeoutExpired:
+        # str(TimeoutExpired) embeds the full argv (prompt + document); raise a
+        # clean message so document text can't trip the non-retryable classifier.
+        raise RuntimeError(f"Codex CLI timed out after {timeout}s")
+    except FileNotFoundError:
+        raise RuntimeError("Codex CLI not found in PATH")
 
     # Parse JSONL output to extract agent messages and structured errors.
     # Codex CLI emits API errors as `{"type":"error",...}` events on stdout
@@ -303,6 +310,8 @@ def call_codex_model(
             event = json.loads(line)
         except json.JSONDecodeError:
             continue
+        if not isinstance(event, dict):
+            continue
         event_type = event.get("type")
         if event_type == "item.completed":
             item = event.get("item", {})
@@ -313,7 +322,11 @@ def call_codex_model(
             input_tokens = usage.get("input_tokens", 0)
             output_tokens = usage.get("output_tokens", 0)
         elif event_type in ("error", "turn.failed"):
-            msg = event.get("message") or event.get("error", {}).get("message")
+            # The "error" field may be a dict, a bare string, or null.
+            err = event.get("error")
+            msg = event.get("message") or (
+                err.get("message") if isinstance(err, dict) else err
+            )
             if msg:
                 structured_error = msg
 
@@ -328,6 +341,10 @@ def call_codex_model(
     if not response_text:
         raise RuntimeError("No agent message in Codex output")
     return response_text, input_tokens, output_tokens
+
+
+# One-shot flag so the retirement notice doesn't repeat on every call/retry.
+_gemini_retirement_warned = False
 
 
 def call_gemini_cli_model(
@@ -345,18 +362,26 @@ def call_gemini_cli_model(
             "gemini/<model> (GEMINI_API_KEY) instead."
         )
 
-    print(
-        "Warning: Gemini CLI consumer service was retired 2026-06-18 in favor of "
-        "Antigravity CLI. If this call fails, switch to antigravity/<model> "
-        "(agy CLI) or gemini/<model> (GEMINI_API_KEY).",
-        file=sys.stderr,
-    )
+    global _gemini_retirement_warned
+    if not _gemini_retirement_warned:
+        _gemini_retirement_warned = True
+        print(
+            "Warning: Gemini CLI consumer service was retired 2026-06-18 in favor of "
+            "Antigravity CLI. If this call fails, switch to antigravity/<model> "
+            "(agy CLI) or gemini/<model> (GEMINI_API_KEY).",
+            file=sys.stderr,
+        )
 
     actual_model = model.split("/", 1)[1] if "/" in model else model
     full_prompt = f"SYSTEM INSTRUCTIONS:\n{system_prompt}\n\nUSER REQUEST:\n{user_message}"
 
     cmd = [GEMINI_CLI_PATH, "-m", actual_model, "-y"]
-    result = subprocess.run(cmd, input=full_prompt, capture_output=True, text=True, timeout=timeout)
+    try:
+        result = subprocess.run(cmd, input=full_prompt, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        raise RuntimeError(f"Gemini CLI timed out after {timeout}s")
+    except FileNotFoundError:
+        raise RuntimeError("Gemini CLI not found in PATH")
 
     if result.returncode != 0:
         raise RuntimeError(f"Gemini CLI failed: {result.stderr.strip()}")
