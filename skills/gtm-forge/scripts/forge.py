@@ -12,10 +12,10 @@ Usage:
     python3 forge.py sources
     python3 forge.py extract <file>
     python3 forge.py triage <claims.json> --models m1,m2 --document <file>
-    python3 forge.py critique --models m1,m2 --document <file>
-    python3 forge.py counter-pitch --models m1,m2 --document <file> --competitors "Deloitte,Accenture"
-    python3 forge.py research --models m1,m2 --query "Cisco partner funding AI security 2026"
-    python3 forge.py debate --models m1,m2 --document <file> --rounds 3
+    python3 forge.py critique --models gpt-5.6-sol,gemini/gemini-3.1-pro-preview --document <file>
+    python3 forge.py counter-pitch --models gpt-5.6-sol --document <file> --competitors "Deloitte,Accenture"
+    python3 forge.py research --models gpt-5.6-sol,xai/grok-4.5 --query "Cisco partner funding AI security 2026"
+    python3 forge.py debate --models gpt-5.6-sol,antigravity/gemini-3.1-pro-high --document <file> --rounds 3
 
 Exit codes:
     0 - Success
@@ -71,6 +71,8 @@ from providers import (
     load_profile,
     save_profile,
     validate_model_credentials,
+    warn_codex_chatgpt_model_support,
+    warn_openai_base_url_override,
 )
 from sources import (
     COMPETITOR_PROFILES,
@@ -79,6 +81,22 @@ from sources import (
     get_competitor_profile,
     list_sources,
 )
+
+
+def validate_models_or_exit(models: list[str]) -> list[str]:
+    """Validate credentials for requested models; exit(2) if any are missing.
+
+    Also emits preflight warnings for Codex ChatGPT-account model mismatches
+    and a globally rerouted OPENAI_BASE_URL.
+    """
+    valid, invalid = validate_model_credentials(models)
+    if invalid:
+        print(f"Error: Missing credentials for: {', '.join(invalid)}", file=sys.stderr)
+        print("Run: python3 forge.py providers", file=sys.stderr)
+        sys.exit(2)
+    warn_codex_chatgpt_model_support(valid)
+    warn_openai_base_url_override(valid)
+    return valid
 
 
 # --- Parsing helpers ---
@@ -335,13 +353,7 @@ def cmd_extract(args):
 
 def cmd_triage(args):
     """Run triage on extracted claims using multiple models."""
-    models = args.models.split(",")
-    valid, invalid = validate_model_credentials(models)
-
-    if invalid:
-        print(f"Error: Missing credentials for: {', '.join(invalid)}", file=sys.stderr)
-        print("Run: python3 forge.py providers", file=sys.stderr)
-        sys.exit(2)
+    valid = validate_models_or_exit(args.models.split(","))
 
     # Read claims
     claims_path = Path(args.claims)
@@ -394,13 +406,7 @@ def cmd_triage(args):
 
 def cmd_critique(args):
     """Run adversarial critique on a GTM document."""
-    models = args.models.split(",")
-    valid, invalid = validate_model_credentials(models)
-
-    if invalid:
-        print(f"Error: Missing credentials for: {', '.join(invalid)}", file=sys.stderr)
-        print("Run: python3 forge.py providers", file=sys.stderr)
-        sys.exit(2)
+    valid = validate_models_or_exit(args.models.split(","))
 
     file_path = Path(args.document)
     if not file_path.exists():
@@ -443,12 +449,7 @@ def cmd_critique(args):
 
 def cmd_counter_pitch(args):
     """Generate competitor counter-pitches."""
-    models = args.models.split(",")
-    valid, invalid = validate_model_credentials(models)
-
-    if invalid:
-        print(f"Error: Missing credentials for: {', '.join(invalid)}", file=sys.stderr)
-        sys.exit(2)
+    valid = validate_models_or_exit(args.models.split(","))
 
     file_path = Path(args.document)
     if not file_path.exists():
@@ -503,12 +504,7 @@ def cmd_counter_pitch(args):
 
 def cmd_research(args):
     """Research vendor funding programs and partner incentives."""
-    models = args.models.split(",")
-    valid, invalid = validate_model_credentials(models)
-
-    if invalid:
-        print(f"Error: Missing credentials for: {', '.join(invalid)}", file=sys.stderr)
-        sys.exit(2)
+    valid = validate_models_or_exit(args.models.split(","))
 
     context = ""
     if args.document:
@@ -537,12 +533,7 @@ def cmd_research(args):
 
 def cmd_debate(args):
     """Run multi-round adversarial debate on a GTM document."""
-    models = args.models.split(",")
-    valid, invalid = validate_model_credentials(models)
-
-    if invalid:
-        print(f"Error: Missing credentials for: {', '.join(invalid)}", file=sys.stderr)
-        sys.exit(2)
+    valid = validate_models_or_exit(args.models.split(","))
 
     file_path = Path(args.document)
     if not file_path.exists():

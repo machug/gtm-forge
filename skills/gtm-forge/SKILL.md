@@ -100,7 +100,7 @@ cd ${CLAUDE_PLUGIN_ROOT}/skills/gtm-forge/scripts && python3 forge.py providers
 > - Set `OPENROUTER_API_KEY` for access to multiple providers with a single key
 > - Or set API keys for 2+ providers (e.g. `OPENAI_API_KEY`, `GEMINI_API_KEY`, `XAI_API_KEY`)
 > - Or set `AZURE_AI_API_KEY` + `AZURE_AI_API_BASE` for Azure AI Foundry models
-> - Or install Codex CLI (`npm install -g @openai/codex`) or Gemini CLI (`npm install -g @google/gemini-cli`)
+> - Or install Codex CLI (`npm install -g @openai/codex`) or Antigravity CLI (`curl -fsSL https://antigravity.google/cli/install.sh | bash`)
 
 Then ask: "Continue anyway with single-model critique, or set up providers first?"
 
@@ -368,7 +368,7 @@ Competitive counter-pitches: 3 generated
 Funding programs identified: 4
 
 Pipeline: research > verify > stress-test > debate (2 rounds) > refine
-Models used: gpt-5.4, gemini-3.1-pro, grok-4.20
+Models used: gpt-5.6-sol, gemini-3.1-pro, grok-4.5
 ```
 
 3. Save the refined GTM alongside the original:
@@ -502,18 +502,23 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 
 | Provider | Env var | Example models |
 |----------|---------|----------------|
-| OpenAI | `OPENAI_API_KEY` | `gpt-5.4`, `gpt-5.4-pro`, `o3` |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-opus-4-6`, `claude-sonnet-4-6` |
-| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-2.5-flash` |
-| xAI | `XAI_API_KEY` | `xai/grok-4.20-0309-reasoning`, `xai/grok-4.20-0309-non-reasoning` |
-| Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-4-6`, `foundry/grok-4.20` |
+| OpenAI | `OPENAI_API_KEY` | `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.5-pro` |
+| Anthropic | `ANTHROPIC_API_KEY` | `claude-fable-5`, `claude-opus-5`, `claude-sonnet-5` |
+| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.6-flash` |
+| xAI | `XAI_API_KEY` | `xai/grok-4.5`, `xai/grok-4.3` |
+| Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-5`, `foundry/grok-4.5` |
 | Mistral | `MISTRAL_API_KEY` | `mistral/mistral-large` |
 | Groq | `GROQ_API_KEY` | `groq/llama-3.3-70b-versatile` |
-| Deepseek | `DEEPSEEK_API_KEY` | `deepseek/deepseek-chat` |
-| OpenRouter | `OPENROUTER_API_KEY` | `openrouter/openai/gpt-5.2-pro` |
-| ZAI (GLM) | `ZAI_API_KEY` | `zai/glm-5` |
-| Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k2.5` |
-| Codex CLI | (subscription) | `codex/gpt-5.3-codex` |
-| Gemini CLI | (account) | `gemini-cli/gemini-3.1-pro-preview` |
+| Deepseek | `DEEPSEEK_API_KEY` | `deepseek/deepseek-v4-pro`, `deepseek/deepseek-v4-flash` |
+| OpenRouter | `OPENROUTER_API_KEY` | `openrouter/openai/gpt-5.5-pro` |
+| ZAI (GLM) | `ZAI_API_KEY` | `zai/glm-5.2` |
+| Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k3` |
+| MiniMax | `MINIMAX_API_KEY` | `minimax/MiniMax-M3` |
+| Codex CLI | (ChatGPT subscription) | `codex/gpt-5.6-sol`, `codex/gpt-5.5` |
+| Antigravity CLI | (Google account) | `antigravity/gemini-3.1-pro-high`, `antigravity/claude-sonnet-4-6` |
+| Gemini CLI | (retired 2026-06-18) | use `antigravity/` or `gemini/` instead |
+
+Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-5.6-sol/terra/luna, gpt-5.5).
+Other models (gpt-5.3-codex, gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
 
 Run `python3 forge.py providers` to see which keys are configured.
