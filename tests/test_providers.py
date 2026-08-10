@@ -43,7 +43,7 @@ def test_detect_available_providers_with_no_keys():
         "GROQ_API_KEY", "OPENROUTER_API_KEY", "DEEPSEEK_API_KEY",
     ]
     with patch.dict(os.environ, {k: "" for k in env_vars_to_clear}, clear=False):
-        from providers import detect_available_providers
-        providers = detect_available_providers()
+        from providers import get_available_providers
+        providers = get_available_providers()
         # Should be a list (may include CLI tools if installed)
         assert isinstance(providers, list)
