@@ -54,6 +54,9 @@ NON_RETRYABLE_PATTERNS = (
     # Antigravity CLI deterministic failures
     "is not authenticated",
     "invalid model selection",
+    # Bedrock deterministic failures (matches the spec-debate reference set)
+    "model not enabled in your bedrock account",
+    "invalid bedrock model id",
 )
 
 CODEX_CHATGPT_HINT = (

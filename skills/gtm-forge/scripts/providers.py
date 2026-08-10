@@ -23,7 +23,7 @@ except ImportError:
 _CLI_COSTS = {
     "codex/": {"input": 0.0, "output": 0.0},
     "gemini-cli/": {"input": 0.0, "output": 0.0},
-    "antigravity": {"input": 0.0, "output": 0.0},
+    "antigravity/": {"input": 0.0, "output": 0.0},
 }
 
 DEFAULT_COST = {"input": 5.00, "output": 15.00}
@@ -34,7 +34,11 @@ def get_model_cost(model: str) -> dict[str, float]:
 
     Falls back to DEFAULT_COST for unknown models.
     """
-    # CLI tools -- free (subscription-based)
+    # CLI tools -- free (subscription-based). Bare "antigravity" means agy's
+    # default model; a plain prefix match would wrongly catch IDs like
+    # "antigravity-pro" that route through litellm.
+    if model == "antigravity":
+        return _CLI_COSTS["antigravity/"]
     for prefix, cost in _CLI_COSTS.items():
         if model.startswith(prefix):
             return cost
@@ -113,7 +117,8 @@ def warn_codex_chatgpt_model_support(models: list[str]) -> None:
         print(
             f"Warning: Codex CLI is authenticated with a ChatGPT account, which "
             f"likely rejects: {', '.join(unsupported)}. ChatGPT-account models "
-            f"(as of 2026-08): gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5. "
+            f"(as of 2026-08): gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5 "
+            f"(plus gpt-5.4/-mini until they retire 2026-08-31). "
             f"Other models need Codex API-key auth or the OPENAI_API_KEY route.\n",
             file=sys.stderr,
         )
@@ -343,7 +348,8 @@ def list_providers():
         print(f"             Auth mode: {auth_mode}")
     print("             Example models: codex/gpt-5.6-sol, codex/gpt-5.6-terra, codex/gpt-5.5")
     print("             Note: ChatGPT-account auth serves only the ChatGPT lineup (gpt-5.6-sol/terra/luna,")
-    print("                   gpt-5.5). gpt-5.3-codex and gpt-5.5-pro need API-key auth or OPENAI_API_KEY.")
+    print("                   gpt-5.5; gpt-5.4/-mini until they retire 2026-08-31). gpt-5.3-codex and")
+    print("                   gpt-5.5-pro need API-key auth or OPENAI_API_KEY.")
     print()
 
     agy_status = "[installed]" if ANTIGRAVITY_AVAILABLE else "[not installed]"

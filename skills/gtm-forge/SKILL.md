@@ -518,7 +518,8 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 | Antigravity CLI | (Google account) | `antigravity/gemini-3.1-pro-high`, `antigravity/claude-sonnet-4-6` |
 | Gemini CLI | (retired 2026-06-18) | use `antigravity/` or `gemini/` instead |
 
-Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-5.6-sol/terra/luna, gpt-5.5).
-Other models (gpt-5.3-codex, gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
+Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-5.6-sol/terra/luna, gpt-5.5;
+gpt-5.4 and gpt-5.4-mini until they retire 2026-08-31). Other models (gpt-5.3-codex,
+gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
 
 Run `python3 forge.py providers` to see which keys are configured.

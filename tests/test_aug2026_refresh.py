@@ -24,6 +24,7 @@ from providers import (
     CODEX_CHATGPT_MODELS,
     codex_auth_mode,
     warn_codex_chatgpt_model_support,
+    warn_openai_base_url_override,
 )
 
 
@@ -56,6 +57,12 @@ class TestNonRetryableErrors:
         assert is_non_retryable_error(
             "Antigravity CLI returned status ERROR: invalid model selection"
         )
+
+    def test_bedrock_deterministic_errors(self):
+        assert is_non_retryable_error(
+            "Model not enabled in your Bedrock account: claude-opus-5"
+        )
+        assert is_non_retryable_error("Invalid Bedrock model ID: bogus.model")
 
     def test_transient_errors_still_retry(self):
         assert not is_non_retryable_error("rate limit exceeded")
@@ -338,3 +345,51 @@ class TestAntigravityProvider:
             "input": 0.0,
             "output": 0.0,
         }
+
+    def test_antigravity_prefix_does_not_swallow_similar_ids(self):
+        # "antigravity-pro" is not the agy CLI; it must not report zero cost
+        assert providers.get_model_cost("antigravity-pro") == providers.DEFAULT_COST
+
+
+class TestOpenAIBaseUrlWarning:
+    def _clean_env(self):
+        return patch.dict(
+            "os.environ",
+            {"OPENAI_BASE_URL": "", "OPENAI_API_BASE": ""},
+            clear=False,
+        )
+
+    def test_warns_on_overridden_url_with_openai_model(self, capsys):
+        with self._clean_env(), patch.dict(
+            "os.environ", {"OPENAI_BASE_URL": "https://proxy.azure.example/v1"}
+        ):
+            warn_openai_base_url_override(["gpt-5.6-sol"])
+        err = capsys.readouterr().err
+        assert "OPENAI_BASE_URL" in err
+        assert "proxy.azure.example" in err
+
+    def test_warns_via_openai_api_base_alias(self, capsys):
+        with self._clean_env(), patch.dict(
+            "os.environ", {"OPENAI_API_BASE": "https://proxy.azure.example/v1"}
+        ):
+            warn_openai_base_url_override(["o3"])
+        assert "route there" in capsys.readouterr().err
+
+    def test_silent_on_official_openai_url(self, capsys):
+        with self._clean_env(), patch.dict(
+            "os.environ", {"OPENAI_BASE_URL": "https://api.openai.com/v1"}
+        ):
+            warn_openai_base_url_override(["gpt-5.6-sol"])
+        assert capsys.readouterr().err == ""
+
+    def test_silent_without_openai_models(self, capsys):
+        with self._clean_env(), patch.dict(
+            "os.environ", {"OPENAI_BASE_URL": "https://proxy.azure.example/v1"}
+        ):
+            warn_openai_base_url_override(["gemini/gemini-3.1-pro-preview", "xai/grok-4.5"])
+        assert capsys.readouterr().err == ""
+
+    def test_silent_without_override(self, capsys):
+        with self._clean_env():
+            warn_openai_base_url_override(["gpt-5.6-sol"])
+        assert capsys.readouterr().err == ""
