@@ -393,3 +393,68 @@ class TestOpenAIBaseUrlWarning:
         with self._clean_env():
             warn_openai_base_url_override(["gpt-5.6-sol"])
         assert capsys.readouterr().err == ""
+
+
+# --- Claude 4.7+ fixed-temperature detection (2026-08-31 refresh) ---
+
+
+@pytest.mark.parametrize(
+    "model,expected",
+    [
+        ("claude-opus-5", (5, 0)),
+        ("claude-opus-4-8", (4, 8)),
+        ("claude-opus-4-7", (4, 7)),
+        ("claude-sonnet-4-6", (4, 6)),
+        ("claude-haiku-4-5", (4, 5)),
+        ("anthropic.claude-opus-4-7-20260416-v1:0", (4, 7)),
+        ("antigravity/claude-sonnet-4-6", (4, 6)),
+        ("gpt-5.6-sol", None),
+        ("claude-3-5-sonnet-20241022-v2:0", None),
+    ],
+)
+def test_claude_version_parsing(model, expected):
+    assert models.claude_version(model) == expected
+
+
+@pytest.mark.parametrize(
+    "model",
+    [
+        "claude-opus-5",
+        "claude-sonnet-5",
+        "claude-fable-5",
+        "claude-opus-4-8",
+        "claude-opus-4-7",
+        "bedrock/anthropic.claude-opus-5",
+    ],
+)
+def test_claude_47_plus_omits_temperature(model):
+    """Claude 4.7+ rejects any temperature but 1, so it must be treated as a
+    reasoning model and get no temperature parameter."""
+    assert models.is_reasoning_model(model) is True
+
+
+@pytest.mark.parametrize(
+    "model",
+    ["claude-sonnet-4-6", "claude-opus-4-6", "claude-haiku-4-5", "claude-sonnet-4"],
+)
+def test_claude_pre_47_keeps_temperature(model):
+    assert models.is_reasoning_model(model) is False
+
+
+@pytest.mark.parametrize("model", ["claude-opus-5", "claude-opus-4-7"])
+def test_claude_uses_max_tokens(model):
+    """Anthropic takes max_tokens; the OpenAI-shaped reasoners take
+    max_completion_tokens."""
+    assert models.uses_max_completion_tokens(model) is False
+
+
+@pytest.mark.parametrize("model", ["gpt-5.6-sol", "o3-mini"])
+def test_openai_reasoners_use_max_completion_tokens(model):
+    assert models.uses_max_completion_tokens(model) is True
+
+
+def test_retired_gpt54_not_in_codex_chatgpt_lineup():
+    """gpt-5.4 and gpt-5.4-mini retired 2026-08-31."""
+    assert "gpt-5.4" not in providers.CODEX_CHATGPT_MODELS
+    assert "gpt-5.4-mini" not in providers.CODEX_CHATGPT_MODELS
+    assert "gpt-5.6-sol" in providers.CODEX_CHATGPT_MODELS

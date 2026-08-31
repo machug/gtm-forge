@@ -75,8 +75,6 @@ CODEX_CHATGPT_MODELS = {
     "gpt-5.6-terra",
     "gpt-5.6-luna",
     "gpt-5.5",
-    "gpt-5.4",  # retires 2026-08-31
-    "gpt-5.4-mini",  # retires 2026-08-31
     "gpt-5.3-codex-spark",  # ChatGPT Pro only
 }
 
@@ -173,11 +171,11 @@ def get_available_providers() -> list[tuple[str, Optional[str], str]]:
         ("OpenAI", "OPENAI_API_KEY", "gpt-5.6-sol"),
         ("Anthropic", "ANTHROPIC_API_KEY", "claude-opus-5"),
         ("Google", "GEMINI_API_KEY", "gemini/gemini-3.1-pro-preview"),
-        ("xAI", "XAI_API_KEY", "xai/grok-4.5"),
+        ("xAI", "XAI_API_KEY", "xai/grok-4.6"),
         ("Mistral", "MISTRAL_API_KEY", "mistral/mistral-large"),
         ("Groq", "GROQ_API_KEY", "groq/llama-3.3-70b-versatile"),
         ("Deepseek", "DEEPSEEK_API_KEY", "deepseek/deepseek-v4-pro"),
-        ("ZAI (GLM)", "ZAI_API_KEY", "zai/glm-5.2"),
+        ("ZAI (GLM)", "ZAI_API_KEY", "zai/glm-5.3"),
         ("Moonshot (Kimi)", "MOONSHOT_API_KEY", "moonshot/kimi-k3"),
         ("MiniMax", "MINIMAX_API_KEY", "minimax/MiniMax-M3"),
         # Azure AI Foundry skipped from auto-detect -- deployment names are user-specific

@@ -32,10 +32,10 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion, WebFetch, WebSea
           ║                                                  ║
           ║  Skill.......: gtm-forge                         ║
           ║  Author......: machug          (hughtec.com)     ║
-          ║  Version.....: 1.1.0                             ║
+          ║  Version.....: 1.2.0                             ║
           ║  Released....: 2026                              ║
           ║  License.....: MIT                               ║
-          ║  Requires....: Python 3.10+, litellm             ║
+          ║  Requires....: Python 3.10+ (deps auto-install)  ║
           ║                                                  ║
           ╠══════════════════════════════════════════════════╣
           ║               PIPELINE OVERVIEW                  ║
@@ -79,7 +79,31 @@ skills/gtm-forge/scripts/
 └── sources.py     # Vendor source registry + MCP detection
 ```
 
-**Requires:** `pip install litellm` (or `pip3 install litellm`)
+## Setup: resolve the interpreter first
+
+**Run this once at the start of every session, before any other command in this skill.** It prints the path to a Python interpreter that can import `litellm`, installing the dependencies into a cached virtual environment on first use.
+
+```bash
+GTM_FORGE_PY=$(bash ${CLAUDE_PLUGIN_ROOT}/skills/gtm-forge/scripts/bootstrap.sh)
+```
+
+Then use `"$GTM_FORGE_PY"` everywhere this skill writes `python3`. For example:
+
+```bash
+cd ${CLAUDE_PLUGIN_ROOT}/skills/gtm-forge/scripts && "$GTM_FORGE_PY" forge.py providers
+```
+
+The script prints only the interpreter path on stdout, so it is safe to capture. Progress messages go to stderr. It reuses an existing environment on later runs, uses `uv` when available and falls back to `python3 -m venv`, and rebuilds automatically if the environment breaks.
+
+Do not run `pip install litellm` by hand, and do not build your own virtual environment. If `bootstrap.sh` fails, report its stderr rather than improvising an install.
+
+The environment lives in `${XDG_CACHE_HOME:-~/.cache}/gtm-forge/venv`, deliberately outside the plugin directory: plugin installs are version-keyed, so an environment stored beside the code would be rebuilt on every plugin update. Override the location with `GTM_FORGE_VENV`.
+
+**Checking the installed version:** `litellm` has no `__version__` attribute. Use `importlib.metadata.version("litellm")`. Reading `litellm.__version__` raises `AttributeError` and makes a working install look broken.
+
+## Claude model behavior
+
+Claude Opus 4.7 and newer — including Claude Opus 5, Sonnet 5, and Fable 5 — accept only `temperature=1`. `models.py` detects these and omits the parameter, and keeps `max_tokens` rather than `max_completion_tokens` for them. Claude Sonnet 4.6, Opus 4.6, and Haiku 4.5 still accept a temperature and are unchanged.
 
 ## Workflow
 
