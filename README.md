@@ -35,7 +35,10 @@ Or manually clone and add to your Claude Code settings.
 ## Requirements
 
 - Python 3.10+
-- `pip install litellm`
+- Dependencies install themselves. `skills/gtm-forge/scripts/bootstrap.sh` prints an interpreter that
+  can import `litellm`, creating a cached environment in `${XDG_CACHE_HOME:-~/.cache}/gtm-forge/venv`
+  on first use: `GTM_FORGE_PY=$(bash skills/gtm-forge/scripts/bootstrap.sh)`. To install by hand
+  instead, use `pip install -r requirements.txt`.
 - API key for at least one LLM provider (or Codex/Gemini CLI)
 
 ### Supported providers
