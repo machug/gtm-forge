@@ -62,8 +62,8 @@ NON_RETRYABLE_PATTERNS = (
 
 CODEX_CHATGPT_HINT = (
     "Codex is authenticated with a ChatGPT account, which only serves: "
-    "gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5 "
-    "(gpt-5.4/-mini retire 2026-08-31; gpt-5.3-codex-spark needs ChatGPT Pro). "
+    "gpt-6-astra (eligible plans), gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5 "
+    "(gpt-5.5 retires 2026-10-14; gpt-5.3-codex-spark needs ChatGPT Pro). "
     "For other models authenticate Codex with an API key or use the "
     "OPENAI_API_KEY litellm route (e.g. --models gpt-5.5-pro)."
 )
@@ -96,7 +96,7 @@ def claude_version(model: str) -> Optional[tuple[int, int]]:
 
 
 def is_reasoning_model(model: str) -> bool:
-    """Check if a model is a reasoning model (o-series, gpt-5, Claude 4.7+).
+    """Check if a model is a reasoning model (o-series, gpt-5/gpt-6, Claude 4.7+).
 
     Reasoning models differ from standard models:
     - They ignore or reject the temperature parameter (fixed internally)
@@ -107,7 +107,8 @@ def is_reasoning_model(model: str) -> bool:
         f"/{p}" in model_lower for p in ("o1", "o3", "o4")
     ):
         return True
-    if "gpt-5" in model_lower:
+    # gpt-6-astra (verified 2026-09-22) rejects temperature != 1 and max_tokens
+    if "gpt-5" in model_lower or "gpt-6" in model_lower:
         return True
     # Anthropic Claude 4.7 and newer only accept temperature=1
     version = claude_version(model_lower)
@@ -316,7 +317,7 @@ def call_codex_model(
     full_prompt = f"SYSTEM INSTRUCTIONS:\n{system_prompt}\n\nUSER REQUEST:\n{user_message}"
 
     cmd = [
-        CODEX_PATH, "exec", "--json", "--full-auto", "--skip-git-repo-check",
+        CODEX_PATH, "exec", "--json", "--sandbox", "workspace-write", "--skip-git-repo-check",
         "--model", actual_model,
         "-c", f'model_reasoning_effort="{reasoning_effort}"',
         full_prompt,

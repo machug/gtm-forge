@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion, WebFetch, WebSea
           ║                                                  ║
           ║  Skill.......: gtm-forge                         ║
           ║  Author......: machug          (hughtec.com)     ║
-          ║  Version.....: 1.3.0                             ║
+          ║  Version.....: 1.4.0                             ║
           ║  Released....: 2026                              ║
           ║  License.....: MIT                               ║
           ║  Requires....: Python 3.10+ (deps auto-install)  ║
@@ -392,7 +392,7 @@ Competitive counter-pitches: 3 generated
 Funding programs identified: 4
 
 Pipeline: research > verify > stress-test > debate (2 rounds) > refine
-Models used: gpt-5.6-sol, gemini-3.1-pro, grok-4.5
+Models used: gpt-5.6-sol, gemini-3.1-pro, grok-4.7
 ```
 
 3. Save the refined GTM alongside the original:
@@ -526,24 +526,24 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 
 | Provider | Env var | Example models |
 |----------|---------|----------------|
-| OpenAI | `OPENAI_API_KEY` | `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.5-pro` |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-fable-5`, `claude-opus-5`, `claude-sonnet-5` |
-| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.6-flash` |
-| xAI | `XAI_API_KEY` | `xai/grok-4.5`, `xai/grok-4.3` |
+| OpenAI | `OPENAI_API_KEY` | `gpt-6-astra`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.5-pro` |
+| Anthropic | `ANTHROPIC_API_KEY` | `claude-fable-5-1`, `claude-opus-5`, `claude-sonnet-5` |
+| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
+| xAI | `XAI_API_KEY` | `xai/grok-4.7`, `xai/grok-4.6` |
 | Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-5`, `foundry/grok-4.5` |
 | Mistral | `MISTRAL_API_KEY` | `mistral/mistral-large` |
 | Groq | `GROQ_API_KEY` | `groq/llama-3.3-70b-versatile` |
-| Deepseek | `DEEPSEEK_API_KEY` | `deepseek/deepseek-v4-pro`, `deepseek/deepseek-v4-flash` |
+| Deepseek | `DEEPSEEK_API_KEY` | `deepseek/deepseek-v4-pro`, `deepseek/deepseek-flash` |
 | OpenRouter | `OPENROUTER_API_KEY` | `openrouter/openai/gpt-5.5-pro` |
 | ZAI (GLM) | `ZAI_API_KEY` | `zai/glm-5.2` |
 | Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k3` |
 | MiniMax | `MINIMAX_API_KEY` | `minimax/MiniMax-M3` |
-| Codex CLI | (ChatGPT subscription) | `codex/gpt-5.6-sol`, `codex/gpt-5.5` |
+| Codex CLI | (ChatGPT subscription) | `codex/gpt-6-astra`, `codex/gpt-5.6-sol`, `codex/gpt-5.5` |
 | Antigravity CLI | (Google account) | `antigravity/gemini-3.1-pro-high`, `antigravity/claude-sonnet-4-6` |
 | Gemini CLI | (retired 2026-06-18) | use `antigravity/` or `gemini/` instead |
 
-Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-5.6-sol/terra/luna, gpt-5.5;
-gpt-5.4 and gpt-5.4-mini until they retire 2026-08-31). Other models (gpt-5.3-codex,
+Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6-astra on eligible plans,
+gpt-5.6-sol/terra/luna, gpt-5.5 until it retires 2026-10-14). Other models (gpt-5.3-codex,
 gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
 
 Run `python3 forge.py providers` to see which keys are configured.
