@@ -355,7 +355,7 @@ def list_providers():
 
     agy_status = "[installed]" if ANTIGRAVITY_AVAILABLE else "[not installed]"
     print(f"  {'Antigravity':12} {'(Google account)':24} {agy_status}")
-    print("             Example models: antigravity/gemini-3.8-flash-high, antigravity/gemini-3.1-pro-high,")
+    print("             Example models: antigravity/gemini-3.8-flash-high, antigravity/gemini-3.8-flash-low,")
     print("             antigravity/claude-sonnet-4-6, antigravity/gpt-oss-120b-medium (`agy models` lists all)")
     print("             Install: curl -fsSL https://antigravity.google/cli/install.sh | bash")
     print("             Auth: run `agy` once interactively (Google sign-in), then headless works")
