@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion, WebFetch, WebSea
           ║                                                  ║
           ║  Skill.......: gtm-forge                         ║
           ║  Author......: machug          (hughtec.com)     ║
-          ║  Version.....: 1.4.0                             ║
+          ║  Version.....: 1.5.0                             ║
           ║  Released....: 2026                              ║
           ║  License.....: MIT                               ║
           ║  Requires....: Python 3.10+ (deps auto-install)  ║
@@ -526,9 +526,9 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 
 | Provider | Env var | Example models |
 |----------|---------|----------------|
-| OpenAI | `OPENAI_API_KEY` | `gpt-6-astra`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.5-pro` |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-fable-5-1`, `claude-opus-5`, `claude-sonnet-5` |
-| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
+| OpenAI | `OPENAI_API_KEY` | `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.5-pro` |
+| Anthropic | `ANTHROPIC_API_KEY` | `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1` |
+| Google | `GEMINI_API_KEY` | `gemini/gemini-4-argon`, `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
 | xAI | `XAI_API_KEY` | `xai/grok-4.7`, `xai/grok-4.6` |
 | Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-5`, `foundry/grok-4.5` |
 | Mistral | `MISTRAL_API_KEY` | `mistral/mistral-large` |
@@ -538,12 +538,12 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 | ZAI (GLM) | `ZAI_API_KEY` | `zai/glm-5.2` |
 | Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k3` |
 | MiniMax | `MINIMAX_API_KEY` | `minimax/MiniMax-M3` |
-| Codex CLI | (ChatGPT subscription) | `codex/gpt-6-astra`, `codex/gpt-5.6-sol`, `codex/gpt-5.5` |
-| Antigravity CLI | (Google account) | `antigravity/gemini-3.1-pro-high`, `antigravity/claude-sonnet-4-6` |
+| Codex CLI | (ChatGPT subscription) | `codex/gpt-6.1-sol`, `codex/gpt-6-sol`, `codex/gpt-6-astra`, `codex/gpt-5.6-sol` |
+| Antigravity CLI | (Google account) | `antigravity/gemini-3.8-flash-high`, `antigravity/claude-sonnet-4-6` |
 | Gemini CLI | (retired 2026-06-18) | use `antigravity/` or `gemini/` instead |
 
-Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6-astra on eligible plans,
-gpt-5.6-sol/terra/luna, gpt-5.5 until it retires 2026-10-14). Other models (gpt-5.3-codex,
-gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
+Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6.1-sol, gpt-6-sol/luna,
+gpt-6-astra on eligible plans, gpt-5.6-sol/terra/luna; gpt-5.5 retired 2026-10-14). Other models
+(gpt-5.3-codex, gpt-5.5, gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
 
 Run `python3 forge.py providers` to see which keys are configured.

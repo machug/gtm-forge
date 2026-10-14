@@ -45,9 +45,9 @@ Or manually clone and add to your Claude Code settings.
 
 | Provider | Env var | Example models |
 |----------|---------|----------------|
-| OpenAI | `OPENAI_API_KEY` | `gpt-6-astra`, `gpt-5.6-sol`, `gpt-5.5-pro` |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-fable-5-1`, `claude-opus-5`, `claude-sonnet-5` |
-| Google | `GEMINI_API_KEY` | `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
+| OpenAI | `OPENAI_API_KEY` | `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.5-pro` |
+| Anthropic | `ANTHROPIC_API_KEY` | `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1` |
+| Google | `GEMINI_API_KEY` | `gemini/gemini-4-argon`, `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
 | xAI | `XAI_API_KEY` | `xai/grok-4.7` |
 | Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-5` |
 | Mistral | `MISTRAL_API_KEY` | `mistral/mistral-large` |
@@ -56,13 +56,13 @@ Or manually clone and add to your Claude Code settings.
 | ZAI (GLM) | `ZAI_API_KEY` | `zai/glm-5.2` |
 | Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k3` |
 | MiniMax | `MINIMAX_API_KEY` | `minimax/MiniMax-M3` |
-| Codex CLI | (ChatGPT subscription) | `codex/gpt-6-astra`, `codex/gpt-5.6-sol`, `codex/gpt-5.5` |
-| Antigravity CLI | (Google account) | `antigravity/gemini-3.1-pro-high` |
+| Codex CLI | (ChatGPT subscription) | `codex/gpt-6.1-sol`, `codex/gpt-6-sol`, `codex/gpt-6-astra`, `codex/gpt-5.6-sol` |
+| Antigravity CLI | (Google account) | `antigravity/gemini-3.8-flash-high` |
 | Gemini CLI | (retired 2026-06-18) | use `antigravity/` or `gemini/` instead |
 
-Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6-astra on eligible plans,
-gpt-5.6-sol/terra/luna, gpt-5.5 until it retires 2026-10-14). Other models (gpt-5.3-codex,
-gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
+Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6.1-sol, gpt-6-sol/luna,
+gpt-6-astra on eligible plans, gpt-5.6-sol/terra/luna; gpt-5.5 retired 2026-10-14). Other models
+(gpt-5.3-codex, gpt-5.5, gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
 
 ## Usage
 
@@ -84,16 +84,16 @@ python3 forge.py providers
 python3 forge.py extract path/to/gtm.md
 
 # Run adversarial critique
-python3 forge.py critique --models gpt-5.6-sol,gemini/gemini-3.1-pro-preview --document gtm.md
+python3 forge.py critique --models gpt-6.1-sol,gemini/gemini-4-argon --document gtm.md
 
 # Generate competitor counter-pitches
-python3 forge.py counter-pitch --models gpt-5.6-sol --document gtm.md --competitors "Deloitte,Accenture"
+python3 forge.py counter-pitch --models gpt-6.1-sol --document gtm.md --competitors "Deloitte,Accenture"
 
 # Research funding programs
 python3 forge.py research --query "Cisco partner funding AI security 2026"
 
 # Full debate loop
-python3 forge.py debate --models gpt-5.6-sol,xai/grok-4.7 --document gtm.md --rounds 3
+python3 forge.py debate --models gpt-6.1-sol,xai/grok-4.7 --document gtm.md --rounds 3
 ```
 
 ## Author

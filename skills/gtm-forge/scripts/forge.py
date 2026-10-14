@@ -12,10 +12,10 @@ Usage:
     python3 forge.py sources
     python3 forge.py extract <file>
     python3 forge.py triage <claims.json> --models m1,m2 --document <file>
-    python3 forge.py critique --models gpt-5.6-sol,gemini/gemini-3.1-pro-preview --document <file>
-    python3 forge.py counter-pitch --models gpt-5.6-sol --document <file> --competitors "Deloitte,Accenture"
-    python3 forge.py research --models gpt-5.6-sol,xai/grok-4.7 --query "Cisco partner funding AI security 2026"
-    python3 forge.py debate --models gpt-5.6-sol,antigravity/gemini-3.1-pro-high --document <file> --rounds 3
+    python3 forge.py critique --models gpt-6.1-sol,gemini/gemini-4-argon --document <file>
+    python3 forge.py counter-pitch --models gpt-6.1-sol --document <file> --competitors "Deloitte,Accenture"
+    python3 forge.py research --models gpt-6.1-sol,xai/grok-4.7 --query "Cisco partner funding AI security 2026"
+    python3 forge.py debate --models gpt-6.1-sol,antigravity/gemini-3.8-flash-high --document <file> --rounds 3
 
 Exit codes:
     0 - Success
