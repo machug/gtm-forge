@@ -103,7 +103,7 @@ The environment lives in `${XDG_CACHE_HOME:-~/.cache}/gtm-forge/venv`, deliberat
 
 ## Claude model behavior
 
-Claude Opus 4.7 and newer — including Claude Opus 5, Sonnet 5, and Fable 5 — accept only `temperature=1`. `models.py` detects these and omits the parameter, and keeps `max_tokens` rather than `max_completion_tokens` for them. Claude Sonnet 4.6, Opus 4.6, and Haiku 4.5 still accept a temperature and are unchanged.
+Claude Opus 4.7 and newer — including Claude Opus 5, Sonnet 5, Fable 5, Fable 5.1, and the 5.5 family (Opus, Sonnet, Haiku) — accept only `temperature=1`. `models.py` detects these and omits the parameter, and keeps `max_tokens` rather than `max_completion_tokens` for them. Claude Sonnet 4.6, Opus 4.6, and Haiku 4.5 still accept a temperature and are unchanged.
 
 ## Workflow
 
