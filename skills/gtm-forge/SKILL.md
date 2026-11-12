@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion, WebFetch, WebSea
           ║                                                  ║
           ║  Skill.......: gtm-forge                         ║
           ║  Author......: machug          (hughtec.com)     ║
-          ║  Version.....: 1.5.0                             ║
+          ║  Version.....: 1.6.0                             ║
           ║  Released....: 2026                              ║
           ║  License.....: MIT                               ║
           ║  Requires....: Python 3.10+ (deps auto-install)  ║
@@ -103,7 +103,7 @@ The environment lives in `${XDG_CACHE_HOME:-~/.cache}/gtm-forge/venv`, deliberat
 
 ## Claude model behavior
 
-Claude Opus 4.7 and newer — including Claude Opus 5, Sonnet 5, Fable 5, Fable 5.1, and the 5.5 family (Opus, Sonnet, Haiku) — accept only `temperature=1`. `models.py` detects these and omits the parameter, and keeps `max_tokens` rather than `max_completion_tokens` for them. Claude Sonnet 4.6, Opus 4.6, and Haiku 4.5 still accept a temperature and are unchanged.
+Claude Opus 4.7 and newer — including Claude Opus 5, Sonnet 5, Fable 5, Fable 5.1, Fable 5.2, and the 5.5 family (Opus, Sonnet, Haiku) — accept only `temperature=1`. `models.py` detects these and omits the parameter, and keeps `max_tokens` rather than `max_completion_tokens` for them. Claude Sonnet 4.6, Opus 4.6, and Haiku 4.5 still accept a temperature and are unchanged.
 
 ## Workflow
 
@@ -526,23 +526,23 @@ When building from scratch (Mode A), the generated GTM follows this structure:
 
 | Provider | Env var | Example models |
 |----------|---------|----------------|
-| OpenAI | `OPENAI_API_KEY` | `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.5-pro` |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1` |
-| Google | `GEMINI_API_KEY` | `gemini/gemini-4-argon`, `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
-| xAI | `XAI_API_KEY` | `xai/grok-4.7`, `xai/grok-4.6` |
+| OpenAI | `OPENAI_API_KEY` | `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-astra`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.5-pro` |
+| Anthropic | `ANTHROPIC_API_KEY` | `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-2`, `claude-fable-5-1` |
+| Google | `GEMINI_API_KEY` | `gemini/gemini-4-argon`, `gemini/gemini-4-carbon`, `gemini/gemini-3.1-pro-preview`, `gemini/gemini-3.8-flash` |
+| xAI | `XAI_API_KEY` | `xai/grok-4.7`, `xai/grok-build-0.1`, `xai/grok-4.6` |
 | Azure AI | `AZURE_AI_API_KEY` | `foundry/claude-opus-5`, `foundry/grok-4.5` |
 | Mistral | `MISTRAL_API_KEY` | `mistral/mistral-large` |
 | Groq | `GROQ_API_KEY` | `groq/llama-3.3-70b-versatile` |
 | Deepseek | `DEEPSEEK_API_KEY` | `deepseek/deepseek-v4-pro`, `deepseek/deepseek-flash` |
 | OpenRouter | `OPENROUTER_API_KEY` | `openrouter/openai/gpt-5.5-pro` |
 | ZAI (GLM) | `ZAI_API_KEY` | `zai/glm-5.2` |
-| Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k3` |
-| MiniMax | `MINIMAX_API_KEY` | `minimax/MiniMax-M3` |
-| Codex CLI | (ChatGPT subscription) | `codex/gpt-6.1-sol`, `codex/gpt-6-sol`, `codex/gpt-6-astra`, `codex/gpt-5.6-sol` |
-| Antigravity CLI | (Google account) | `antigravity/gemini-3.8-flash-high`, `antigravity/claude-sonnet-4-6` |
+| Moonshot | `MOONSHOT_API_KEY` | `moonshot/kimi-k3.1-pro`, `moonshot/kimi-k3` |
+| MiniMax | `MINIMAX_API_KEY` | `minimax/MiniMax-M3`, `minimax/MiniMax-M3.1-Flash` |
+| Codex CLI | (ChatGPT subscription) | `codex/gpt-6.1-sol`, `codex/gpt-6.1-terra`, `codex/gpt-6-sol`, `codex/gpt-6-astra`, `codex/gpt-5.6-sol` |
+| Antigravity CLI | (Google account) | `antigravity/gemini-3.8-flash-high`, `antigravity/gemini-4-argon-high`, `antigravity/claude-sonnet-4-6` |
 | Gemini CLI | (retired 2026-06-18) | use `antigravity/` or `gemini/` instead |
 
-Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6.1-sol, gpt-6-sol/luna,
+Note: ChatGPT-account Codex serves only the ChatGPT lineup (gpt-6.1-sol/terra, gpt-6-sol/luna,
 gpt-6-astra on eligible plans, gpt-5.6-sol/terra/luna; gpt-5.5 retired 2026-10-14). Other models
 (gpt-5.3-codex, gpt-5.5, gpt-5.5-pro) need Codex API-key auth or the `OPENAI_API_KEY` route.
 
