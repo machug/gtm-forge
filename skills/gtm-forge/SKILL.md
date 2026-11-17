@@ -32,7 +32,7 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion, WebFetch, WebSea
           ║                                                  ║
           ║  Skill.......: gtm-forge                         ║
           ║  Author......: machug          (hughtec.com)     ║
-          ║  Version.....: 1.7.0                             ║
+          ║  Version.....: 1.7.1                             ║
           ║  Released....: 2026                              ║
           ║  License.....: MIT                               ║
           ║  Requires....: Python 3.10+ (deps auto-install)  ║
