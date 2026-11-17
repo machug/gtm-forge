@@ -39,7 +39,10 @@ Or manually clone and add to your Claude Code settings.
   can import `litellm`, creating a cached environment in `${XDG_CACHE_HOME:-~/.cache}/gtm-forge/venv`
   on first use: `GTM_FORGE_PY=$(bash skills/gtm-forge/scripts/bootstrap.sh)`. To install by hand
   instead, use `pip install -r requirements.txt`.
-- API key for at least one LLM provider (or Codex/Gemini CLI)
+- API key for at least one LLM provider (or Codex/Gemini CLI). For Gemini, the lightest route is a free key from
+  [Google AI Studio](https://aistudio.google.com/apikey): `export GEMINI_API_KEY=...` and use `gemini/` models,
+  nothing else to install. If you set the key with Google's `gemini-api configure`, it lives in the OS keychain
+  and this skill cannot see it; export it as well.
 
 ### Supported providers
 
